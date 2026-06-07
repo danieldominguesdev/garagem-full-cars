@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Garagem Full Cars — Funilaria & Pintura</title>
+<meta name="description" content="Especialistas em funilaria, pintura automotiva, polimento, solda e recuperação de para-choques. Orçamento grátis pelo WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,400;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0d0d0d;
+    --dark: #141414;
+    --card: #1c1c1c;
+    --border: #2a2a2a;
+    --orange: #D85A30;
+    --orange-light: #f06a3a;
+    --gold: #EF9F27;
+    --white: #f0ece4;
+    --muted: #888;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+    --font-cond: 'Barlow Condensed', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 12px; height: 12px;
+    background: var(--orange);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transition: transform 0.15s ease, opacity 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid rgba(216,90,48,0.5);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transition: transform 0.35s ease, width 0.2s, height 0.2s, opacity 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* Noise texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.35;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid transparent;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  nav.scrolled {
+    background: rgba(13,13,13,0.95);
+    border-color: var(--border);
+    backdrop-filter: blur(10px);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: 0.05em;
+    color: var(--white);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .nav-logo span { color: var(--orange); }
+  .nav-links {
+    display: flex;
+    gap: 32px;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--font-cond);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--orange);
+    color: #fff !important;
+    padding: 8px 20px;
+    border-radius: 4px;
+    font-family: var(--font-cond) !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--orange-light) !important; color: #fff !important; }
+
+  /* HERO */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 40px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(216,90,48,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(216,90,48,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridPan 20s linear infinite;
+  }
+  @keyframes gridPan {
+    from { background-position: 0 0; }
+    to { background-position: 60px 60px; }
+  }
+
+  .hero-accent {
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(216,90,48,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    font-family: var(--font-cond);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block;
+    width: 40px; height: 1px;
+    background: var(--orange);
+  }
+
+  .hero-title {
+    font-family: var(--font-display);
+    font-size: clamp(72px, 14vw, 160px);
+    line-height: 0.88;
+    letter-spacing: 0.01em;
+    color: var(--white);
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.5s forwards;
+  }
+  .hero-title .accent { color: var(--orange); }
+  .hero-title .stroke {
+    -webkit-text-stroke: 1px var(--white);
+    color: transparent;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--muted);
+    max-width: 480px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.7s forwards;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--orange);
+    color: #fff;
+    font-family: var(--font-cond);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 28px;
+    border-radius: 4px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--orange-light); transform: translateY(-2px); }
+
+  .btn-secondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--white);
+    font-family: var(--font-cond);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 28px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: border-color 0.2s, transform 0.15s;
+  }
+  .btn-secondary:hover { border-color: var(--orange); transform: translateY(-2px); }
+
+  .hero-scroll {
+    position: absolute;
+    bottom: 32px; right: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-cond);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    opacity: 0;
+    animation: fadeIn 1s ease 1.4s forwards;
+  }
+  .hero-scroll-line {
+    width: 1px; height: 48px;
+    background: linear-gradient(to bottom, var(--orange), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--card);
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+  }
+  .stat {
+    text-align: center;
+    padding: 0 20px;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 48px;
+    color: var(--orange);
+    line-height: 1;
+    display: block;
+  }
+  .stat-label {
+    font-family: var(--font-cond);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* SECTION COMMON */
+  section { position: relative; z-index: 2; }
+  .section-inner { max-width: 1200px; margin: 0 auto; padding: 100px 40px; }
+
+  .section-label {
+    font-family: var(--font-cond);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--orange);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-label::before {
+    content: '';
+    display: block;
+    width: 24px; height: 1px;
+    background: var(--orange);
+  }
+
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(40px, 6vw, 72px);
+    line-height: 0.95;
+    letter-spacing: 0.01em;
+    color: var(--white);
+    margin-bottom: 48px;
+  }
+
+  /* SERVICES */
+  #services { background: var(--black); }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .service-card {
+    background: var(--dark);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+    cursor: none;
+  }
+  .service-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .service-card:hover { background: #1f1f1f; }
+  .service-card:hover::before { transform: scaleX(1); }
+
+  .service-num {
+    font-family: var(--font-display);
+    font-size: 64px;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 16px;
+    transition: color 0.3s;
+    user-select: none;
+  }
+  .service-card:hover .service-num { color: rgba(216,90,48,0.15); }
+
+  .service-icon-wrap {
+    width: 48px; height: 48px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .service-card:hover .service-icon-wrap {
+    border-color: var(--orange);
+    background: rgba(216,90,48,0.08);
+  }
+  .service-icon-wrap svg { width: 22px; height: 22px; stroke: var(--orange); fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  .service-name {
+    font-family: var(--font-cond);
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .service-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 20px;
+  }
+  .service-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .service-tag {
+    font-family: var(--font-cond);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--orange);
+    background: rgba(216,90,48,0.1);
+    border: 1px solid rgba(216,90,48,0.2);
+    padding: 3px 10px;
+    border-radius: 3px;
+  }
+
+  /* WHY US */
+  #why { background: var(--dark); }
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .why-left .big-statement {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 4vw, 52px);
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 24px;
+  }
+  .why-left .big-statement em {
+    font-style: normal;
+    color: var(--orange);
+  }
+  .why-left p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.7;
+    margin-bottom: 32px;
+  }
+  .why-right {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .why-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.2s;
+  }
+  .why-item:last-child { border-bottom: none; }
+  .why-item:hover { background: rgba(216,90,48,0.04); }
+  .why-item-num {
+    font-family: var(--font-display);
+    font-size: 32px;
+    color: var(--orange);
+    line-height: 1;
+    flex-shrink: 0;
+    min-width: 40px;
+  }
+  .why-item-title {
+    font-family: var(--font-cond);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 4px;
+  }
+  .why-item-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* PROCESS */
+  #process { background: var(--black); }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .process-steps::before {
+    content: '';
+    position: absolute;
+    top: 32px; left: 12.5%; right: 12.5%;
+    height: 1px;
+    background: var(--border);
+    z-index: 0;
+  }
+  .process-step {
+    text-align: center;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+  .step-circle {
+    width: 64px; height: 64px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    background: var(--dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-family: var(--font-display);
+    font-size: 26px;
+    color: var(--orange);
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .process-step:hover .step-circle {
+    border-color: var(--orange);
+    background: rgba(216,90,48,0.08);
+  }
+  .step-title {
+    font-family: var(--font-cond);
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 8px;
+  }
+  .step-desc {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* CONTACT */
+  #contact { background: var(--dark); }
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .contact-left p {
+    font-size: 16px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 40px;
+  }
+
+  .contact-channels {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    background: var(--card);
+    transition: border-color 0.2s, transform 0.15s, background 0.2s;
+    group: true;
+  }
+  .contact-link:hover {
+    border-color: var(--orange);
+    transform: translateX(6px);
+    background: rgba(216,90,48,0.04);
+  }
+  .contact-link-icon {
+    width: 44px; height: 44px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .contact-link-icon svg { width: 22px; height: 22px; }
+  .contact-link-label {
+    font-family: var(--font-cond);
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .contact-link-value {
+    font-family: var(--font-cond);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: 0.02em;
+  }
+  .contact-link-arrow {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 20px;
+    transition: transform 0.2s, color 0.2s;
+  }
+  .contact-link:hover .contact-link-arrow {
+    transform: translateX(4px);
+    color: var(--orange);
+  }
+
+  .contact-right {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .contact-form-header {
+    background: var(--card);
+    padding: 24px 28px;
+    border-bottom: 1px solid var(--border);
+  }
+  .contact-form-header h3 {
+    font-family: var(--font-cond);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--white);
+  }
+  .contact-form-header p {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .contact-form-body {
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .form-field label {
+    font-family: var(--font-cond);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form-field input,
+  .form-field select,
+  .form-field textarea {
+    background: var(--black);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--white);
+    font-family: var(--font-body);
+    font-size: 14px;
+    padding: 12px 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+    appearance: none;
+  }
+  .form-field input:focus,
+  .form-field select:focus,
+  .form-field textarea:focus {
+    border-color: var(--orange);
+  }
+  .form-field input::placeholder,
+  .form-field textarea::placeholder {
+    color: #444;
+  }
+  .form-field select option { background: var(--dark); }
+  .form-field textarea { resize: vertical; min-height: 80px; }
+  .form-submit {
+    width: 100%;
+    background: var(--orange);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: var(--font-cond);
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 14px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .form-submit:hover { background: var(--orange-light); transform: translateY(-1px); }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    border-top: 1px solid var(--border);
+    padding: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+    z-index: 2;
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+  .footer-logo span { color: var(--orange); }
+  .footer-copy {
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .footer-socials {
+    display: flex;
+    gap: 16px;
+  }
+  .footer-socials a {
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--muted);
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .footer-socials a:hover { border-color: var(--orange); color: var(--orange); }
+  .footer-socials svg { width: 16px; height: 16px; fill: currentColor; }
+
+  /* FLOATING WHATSAPP */
+  .float-wpp {
+    position: fixed;
+    bottom: 32px; right: 32px;
+    z-index: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #25D366;
+    color: #fff;
+    font-family: var(--font-cond);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 14px 20px 14px 16px;
+    border-radius: 50px;
+    box-shadow: 0 8px 32px rgba(37,211,102,0.25);
+    transition: transform 0.2s, box-shadow 0.2s;
+    animation: floatPulse 3s ease-in-out infinite;
+  }
+  .float-wpp:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(37,211,102,0.35);
+  }
+  .float-wpp svg { width: 22px; height: 22px; fill: #fff; flex-shrink: 0; }
+  @keyframes floatPulse {
+    0%, 100% { box-shadow: 0 8px 32px rgba(37,211,102,0.25); }
+    50% { box-shadow: 0 8px 40px rgba(37,211,102,0.45); }
+  }
+
+  /* SCROLL REVEAL */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* MOBILE */
+  @media (max-width: 768px) {
+    body { cursor: auto; }
+    .cursor, .cursor-ring { display: none; }
+    nav { padding: 16px 20px; }
+    .nav-links { display: none; }
+    #hero { padding: 0 20px 60px; }
+    .hero-title { font-size: clamp(56px, 16vw, 90px); }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); gap: 1px; background: var(--border); }
+    .stat { border-right: none; border-bottom: 1px solid var(--border); padding: 20px; }
+    .stat:nth-child(odd) { border-right: 1px solid var(--border); }
+    .stat:nth-child(3), .stat:nth-child(4) { border-bottom: none; }
+    .section-inner { padding: 60px 20px; }
+    .why-grid { grid-template-columns: 1fr; gap: 40px; }
+    .process-steps { grid-template-columns: repeat(2, 1fr); gap: 32px; }
+    .process-steps::before { display: none; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    footer { padding: 24px 20px; justify-content: center; text-align: center; }
+    .float-wpp { bottom: 20px; right: 20px; padding: 12px 16px 12px 14px; font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Garagem <span>Full Cars</span></a>
+  <ul class="nav-links">
+    <li><a href="#services">Serviços</a></li>
+    <li><a href="#why">Por que nós</a></li>
+    <li><a href="#process">Como funciona</a></li>
+    <li><a href="#contact" class="nav-cta">Orçamento grátis</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-grid-bg"></div>
+  <div class="hero-accent"></div>
+  <div class="hero-tag">Funilaria & Pintura Automotiva</div>
+  <h1 class="hero-title">
+    <span class="stroke">Seu</span> carro<br>
+    de <span class="accent">volta</span><br>
+    ao <span class="stroke">original</span>
+  </h1>
+  <p class="hero-sub">Especialistas em funilaria, pintura, solda, polimento e recuperação de para-choques. Qualidade e capricho em cada serviço.</p>
+  <div class="hero-btns">
+    <a href="https://wa.me/5531990854272?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20orçamento." target="_blank" class="btn-primary">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Orçamento pelo WhatsApp
+    </a>
+    <a href="#services" class="btn-secondary">
+      Ver serviços
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </a>
+  </div>
+  <div class="hero-scroll">
+    <div class="hero-scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-num" data-count="10">0</span>
+    <span class="stat-label">Anos de experiência</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num" data-count="500">0</span>
+    <span class="stat-label">Carros recuperados</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num" data-count="5">0</span>
+    <span class="stat-label">Serviços especializados</span>
+  </div>
+  <div class="stat">
+    <span class="stat-num" data-count="100">0</span>
+    <span class="stat-label">% de satisfação</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="section-inner">
+    <div class="section-label">O que fazemos</div>
+    <h2 class="section-title reveal">Nossos<br>Serviços</h2>
+    <div class="services-grid reveal">
+
+      <div class="service-card">
+        <div class="service-num">01</div>
+        <div class="service-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div class="service-name">Funilaria</div>
+        <p class="service-desc">Recuperamos sua lataria com precisão cirúrgica — de amassados simples a batidas graves. Sua estrutura como saiu da fábrica.</p>
+        <div class="service-items">
+          <span class="service-tag">Amassados</span>
+          <span class="service-tag">Lataria</span>
+          <span class="service-tag">Para-lamas</span>
+          <span class="service-tag">Portas</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-num">02</div>
+        <div class="service-icon-wrap">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="service-name">Pintura</div>
+        <p class="service-desc">Tinta original, preparação impecável. Pintura parcial ou completa com resultado que ninguém vai notar a diferença.</p>
+        <div class="service-items">
+          <span class="service-tag">Pintura total</span>
+          <span class="service-tag">Troca de cor</span>
+          <span class="service-tag">Pintura parcial</span>
+          <span class="service-tag">Primer</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-num">03</div>
+        <div class="service-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="service-name">Polimento</div>
+        <p class="service-desc">Devolvemos o brilho original da pintura, eliminamos riscos superficiais e aplicamos camada de proteção duradoura.</p>
+        <div class="service-items">
+          <span class="service-tag">Brilho</span>
+          <span class="service-tag">Anti-risco</span>
+          <span class="service-tag">Cristalização</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-num">04</div>
+        <div class="service-icon-wrap">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        </div>
+        <div class="service-name">Para-choque</div>
+        <p class="service-desc">Recuperação completa de para-choques trincados ou quebrados. Economize sem abrir mão da aparência original.</p>
+        <div class="service-items">
+          <span class="service-tag">Reforma</span>
+          <span class="service-tag">Pintura</span>
+          <span class="service-tag">Encaixe perfeito</span>
+        </div>
+      </div>
+
+      <div class="service-card">
+        <div class="service-num">05</div>
+        <div class="service-icon-wrap">
+          <svg viewBox="0 0 24 24"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
+        </div>
+        <div class="service-name">Solda</div>
+        <p class="service-desc">Soldagem profissional para estrutura e carroceria. MIG, TIG e ponto. Remoção de ferrugem e reforço estrutural.</p>
+        <div class="service-items">
+          <span class="service-tag">MIG/TIG</span>
+          <span class="service-tag">Estrutural</span>
+          <span class="service-tag">Anti-ferrugem</span>
+        </div>
+      </div>
+
+      <div class="service-card" style="background:rgba(216,90,48,0.06); border-left: 3px solid var(--orange);">
+        <div class="service-num" style="color: rgba(216,90,48,0.2);">+</div>
+        <div class="service-icon-wrap" style="border-color: rgba(216,90,48,0.3);">
+          <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="service-name" style="color:var(--orange);">Dúvidas?</div>
+        <p class="service-desc">Não encontrou o que precisa? Fala com a gente. Avaliamos cada caso com atenção e damos o melhor orçamento.</p>
+        <a href="https://wa.me/5531990854272?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20um%20serviço." target="_blank" class="btn-primary" style="margin-top:12px; font-size:13px; padding:10px 18px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chamar no WhatsApp
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- WHY US -->
+<section id="why">
+  <div class="section-inner">
+    <div class="section-label reveal">Por que escolher a gente</div>
+    <div class="why-grid">
+      <div class="why-left reveal">
+        <div class="big-statement">
+          Fazemos o serviço <em>certo</em> na primeira vez.
+        </div>
+        <p>Cada carro que entra na Garagem Full Cars recebe atenção total. Sem atalho, sem improviso — só técnica, experiência e orgulho no trabalho bem feito.</p>
+        <a href="#contact" class="btn-primary" style="width: fit-content;">Falar com a gente</a>
+      </div>
+      <div class="why-right reveal">
+        <div class="why-item">
+          <div class="why-item-num">01</div>
+          <div>
+            <div class="why-item-title">Equipe experiente</div>
+            <div class="why-item-desc">Profissionais com anos de prática em funilaria e pintura automotiva.</div>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-item-num">02</div>
+          <div>
+            <div class="why-item-title">Materiais de qualidade</div>
+            <div class="why-item-desc">Tintas originais, massas e primers de primeira linha para resultado duradouro.</div>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-item-num">03</div>
+          <div>
+            <div class="why-item-title">Orçamento transparente</div>
+            <div class="why-item-desc">Sem surpresas na conta. Você aprova antes, a gente executa depois.</div>
+          </div>
+        </div>
+        <div class="why-item">
+          <div class="why-item-num">04</div>
+          <div>
+            <div class="why-item-title">Atendimento rápido</div>
+            <div class="why-item-desc">Respondemos pelo WhatsApp na hora e agendamos sem burocracia.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-inner">
+    <div class="section-label reveal">Simples assim</div>
+    <h2 class="section-title reveal">Como<br>Funciona</h2>
+    <div class="process-steps reveal">
+      <div class="process-step">
+        <div class="step-circle">1</div>
+        <div class="step-title">Manda mensagem</div>
+        <p class="step-desc">Fale com a gente pelo WhatsApp e descreva o que aconteceu com o carro.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-circle">2</div>
+        <div class="step-title">Avaliação grátis</div>
+        <p class="step-desc">Você traz o carro, a gente avalia o dano e te passa o orçamento sem compromisso.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-circle">3</div>
+        <div class="step-title">Mão na massa</div>
+        <p class="step-desc">Aprovado o orçamento, colocamos o carro na fila e te avisamos sobre o andamento.</p>
+      </div>
+      <div class="process-step">
+        <div class="step-circle">4</div>
+        <div class="step-title">Entrega perfeita</div>
+        <p class="step-desc">Seu carro pronto, limpo e com o acabamento que você merece. É só buscar.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-inner">
+    <div class="section-label reveal">Fale com a gente</div>
+    <h2 class="section-title reveal">Solicite seu<br>Orçamento</h2>
+    <div class="contact-grid">
+      <div class="contact-left reveal">
+        <p>Atendemos pelo WhatsApp e Instagram. Manda uma mensagem, conta o que aconteceu com o carro e a gente te responde rapidinho com as melhores opções.</p>
+        <div class="contact-channels">
+          <a href="https://wa.me/5531990854272?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20orçamento%20gratuito." target="_blank" class="contact-link">
+            <div class="contact-link-icon" style="background:rgba(37,211,102,0.1);">
+              <svg viewBox="0 0 24 24" fill="#25D366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </div>
+            <div>
+              <div class="contact-link-label">WhatsApp</div>
+              <div class="contact-link-value">(31) XXXXX-XXXX</div>
+            </div>
+            <div class="contact-link-arrow">→</div>
+          </a>
+          <a href="https://www.instagram.com/garagemfullcars?igsh=MThiaDg3NjFsdGNoeQ==" target="_blank" class="contact-link">
+            <div class="contact-link-icon" style="background:rgba(216,90,48,0.1);">
+              <svg viewBox="0 0 24 24" fill="var(--orange)"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+            </div>
+            <div>
+              <div class="contact-link-label">Instagram</div>
+              <div class="contact-link-value">@garagemfullcars</div>
+            </div>
+            <div class="contact-link-arrow">→</div>
+          </a>
+        </div>
+      </div>
+
+      <div class="contact-right reveal">
+        <div class="contact-form-header">
+          <h3>Orçamento rápido</h3>
+          <p>Preencha e te respondemos pelo WhatsApp</p>
+        </div>
+        <div class="contact-form-body">
+          <div class="form-field">
+            <label>Seu nome</label>
+            <input type="text" id="f-nome" placeholder="Como você se chama?">
+          </div>
+          <div class="form-field">
+            <label>Tipo de serviço</label>
+            <select id="f-servico">
+              <option value="" disabled selected>Selecione o serviço</option>
+              <option>Funilaria / Lanternagem</option>
+              <option>Pintura automotiva</option>
+              <option>Polimento</option>
+              <option>Para-choque</option>
+              <option>Solda</option>
+              <option>Outro / Não sei ainda</option>
+            </select>
+          </div>
+          <div class="form-field">
+            <label>Descreva o problema</label>
+            <textarea id="f-desc" placeholder="Ex: bati o carro na garagem, amassou a porta dianteira direita..."></textarea>
+          </div>
+          <button class="form-submit" onclick="enviarWpp()">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Enviar pelo WhatsApp ↗
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Garagem <span>Full Cars</span></div>
+  <p class="footer-copy">© 2026 Garagem Full Cars — Funilaria & Pintura</p>
+  <p class="footer-copy" style="font-size:12px; color:#444;">Criado por <span style="color:var(--orange); font-weight:600;">Daniel Dev</span></p>
+  <div class="footer-socials">
+    <a href="https://wa.me/5531990854272" target="_blank" aria-label="WhatsApp">
+      <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    </a>
+    <a href="https://www.instagram.com/garagemfullcars?igsh=MThiaDg3NjFsdGNoeQ==" target="_blank" aria-label="Instagram">
+      <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+    </a>
+  </div>
+</footer>
+
+<!-- FLOATING WHATSAPP -->
+<a href="https://wa.me/5531990854272?text=Olá!%20Vim%20pelo%20site%20e%20gostaria%20de%20um%20orçamento." target="_blank" class="float-wpp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  Orçamento grátis
+</a>
+
+<script>
+  // Custom cursor
+  var cursor = document.getElementById('cursor');
+  var ring = document.getElementById('cursor-ring');
+  var rx = 0, ry = 0;
+  document.addEventListener('mousemove', function(e) {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    rx += (e.clientX - rx) * 0.12;
+    ry += (e.clientY - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+  });
+  document.querySelectorAll('a, button').forEach(function(el) {
+    el.addEventListener('mouseenter', function() {
+      cursor.style.transform = 'translate(-50%,-50%) scale(2)';
+      ring.style.width = '52px'; ring.style.height = '52px';
+    });
+    el.addEventListener('mouseleave', function() {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.width = '36px'; ring.style.height = '36px';
+    });
+  });
+
+  // Smooth cursor ring follow
+  function animRing() {
+    rx += (parseFloat(cursor.style.left || 0) - rx) * 0.1;
+    ry += (parseFloat(cursor.style.top || 0) - ry) * 0.1;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // Nav scroll
+  window.addEventListener('scroll', function() {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Counter animation
+  function animCount(el, target) {
+    var start = 0;
+    var duration = 1500;
+    var step = target / (duration / 16);
+    var timer = setInterval(function() {
+      start += step;
+      if (start >= target) { start = target; clearInterval(timer); }
+      el.textContent = Math.floor(start) + (el.dataset.count === '100' ? '%' : '+');
+    }, 16);
+  }
+  var counted = false;
+  window.addEventListener('scroll', function() {
+    if (!counted) {
+      var bar = document.querySelector('.stats-bar');
+      if (bar && bar.getBoundingClientRect().top < window.innerHeight) {
+        counted = true;
+        document.querySelectorAll('[data-count]').forEach(function(el) {
+          animCount(el, parseInt(el.dataset.count));
+        });
+      }
+    }
+  });
+
+  // Scroll reveal
+  var reveals = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(function(el) { observer.observe(el); });
+
+  // WhatsApp form
+  function enviarWpp() {
+    var nome = document.getElementById('f-nome').value.trim();
+    var servico = document.getElementById('f-servico').value;
+    var desc = document.getElementById('f-desc').value.trim();
+    if (!nome || !servico) {
+      alert('Preencha seu nome e o tipo de serviço!');
+      return;
+    }
+    var msg = 'Olá! Vim pelo site da Garagem Full Cars.\n\nNome: ' + nome + '\nServiço: ' + servico + (desc ? '\nDescrição: ' + desc : '');
+    window.open('https://wa.me/5531990854272?text=' + encodeURIComponent(msg), '_blank');
+  }
+</script>
+</body>
+</html>
